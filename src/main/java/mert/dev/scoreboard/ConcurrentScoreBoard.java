@@ -9,10 +9,15 @@ import mert.dev.scoreboard.domain.Score;
 
 public class ConcurrentScoreBoard implements ScoreBoard {
 
+    private static final ConcurrentScoreBoard concurrentScoreBoard = new ConcurrentScoreBoard();
     private final Map<Game, Score> scoreBoard;
 
-    public ConcurrentScoreBoard() {
-        this.scoreBoard = new ConcurrentHashMap<>();
+    private ConcurrentScoreBoard() {
+        scoreBoard = new ConcurrentHashMap<>();
+    }
+
+    public static ConcurrentScoreBoard getInstance() {
+        return concurrentScoreBoard;
     }
 
     @Override

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import mert.dev.scoreboard.domain.Game;
 import mert.dev.scoreboard.domain.Score;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,12 +11,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConcurrentScoreBoardTest {
 
-    private ScoreBoard scoreBoard;
+    private final ScoreBoard scoreBoard = ConcurrentScoreBoard.getInstance();
 
-    @BeforeEach
-    void setup() {
-        scoreBoard = new ConcurrentScoreBoard();
-    }
 
     @Test
     void startGameHomeTeamNameValidation() {
@@ -48,6 +43,9 @@ class ConcurrentScoreBoardTest {
 
         // then
         assertThat(result).isTrue();
+
+        // cleanup
+        scoreBoard.finishGame(homeTeamName, awayTeamName);
     }
 
     @Test
@@ -62,6 +60,9 @@ class ConcurrentScoreBoardTest {
 
         // then
         assertThat(result).isFalse();
+
+        // cleanup
+        scoreBoard.finishGame(homeTeamName, awayTeamName);
     }
 
     @Test
@@ -94,6 +95,9 @@ class ConcurrentScoreBoardTest {
 
         // then
         assertThat(result).isTrue();
+
+        // cleanup
+        scoreBoard.finishGame(homeTeamName, awayTeamName);
     }
 
     @Test
@@ -169,6 +173,9 @@ class ConcurrentScoreBoardTest {
 
         // then
         assertThat(result).isTrue();
+
+        // cleanup
+        scoreBoard.finishGame(homeTeamName, awayTeamName);
     }
 
     @Test
@@ -186,6 +193,9 @@ class ConcurrentScoreBoardTest {
 
         // then
         assertThat(result).isFalse();
+
+        // cleanup
+        scoreBoard.finishGame(homeTeamName, awayTeamName);
     }
 
     @Test
@@ -212,7 +222,10 @@ class ConcurrentScoreBoardTest {
         Map.Entry<Game, Score> lastEntry = summary.getLast();
         assertThat(lastEntry.getKey()).isEqualTo(game3);
 
-
+        // cleanup
+        scoreBoard.finishGame(game1.homeTeam(), game1.awayTeam());
+        scoreBoard.finishGame(game2.homeTeam(), game2.awayTeam());
+        scoreBoard.finishGame(game3.homeTeam(), game3.awayTeam());
     }
 
 }
